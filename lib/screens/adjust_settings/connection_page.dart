@@ -192,37 +192,103 @@ class _ConnectDevices extends State<ConnectDevices> {
 
   }
 
+
+  connection(ScanResult bluetoothDevice) async{
+    print("Conection:--------------------------------------------------");
+
+      if (bluetoothDevice.device.localName == 'POP_Light') {
+        print("connection with pop in comparision ");
+        print("device iam connecting with $bluetoothDevice");
+        isConnectingOrDisconnecting[
+        bluetoothDevice.device.remoteId] ??= ValueNotifier(true);
+        isConnectingOrDisconnecting[bluetoothDevice.device.remoteId]!
+            .value = true;
+        await bluetoothDevice.device
+            .connect(timeout:Duration(seconds: 1))
+            .catchError((e) {
+          final snackBar =
+          snackBarFail(prettyException("Connect Error:", e));
+          snackBarKeyC.currentState?.removeCurrentSnackBar();
+          snackBarKeyC.currentState?.showSnackBar(snackBar);
+        }).then((v) {
+          isConnectingOrDisconnecting[bluetoothDevice
+              .device.remoteId] ??= ValueNotifier(false);
+          isConnectingOrDisconnecting[
+          bluetoothDevice.device.remoteId]!
+              .value = false;
+        });
+       await callDiscoverServices(bluetoothDevice);
+
+    }
+  }
+
+
+   callDiscoverServices(ScanResult r) async {
+    print(
+        "in callDiscoverServices-----------------------------------------------");
+
+    try {
+      await r.device.discoverServices();
+
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  startScanner() async
+  { bool present=false;
+  try{
+    FlutterBluePlus.scanResults.listen((results) {
+      for (ScanResult r in results) {
+        if(r.device.localName=="POP_Light")
+
+          for (int index=0;index<discoveredBluetoothDevicesList.length;index++){
+            if(discoveredBluetoothDevicesList[index]?.device.remoteId==r?.device.remoteId || r==null) {
+              present == true;
+            }}
+        if(present==false)
+        {
+          discoveredBluetoothDevicesList.add(r);
+        }
+        print('${r.device.localName} found! rssi: ${r.rssi}');
+      }
+    });
+// Start scanning
+    FlutterBluePlus.startScan(timeout: Duration(milliseconds: 2));
+// Stop scanning
+    await Future.delayed(Duration(milliseconds: 500));
+
+    // Stop scanning
+    await FlutterBluePlus.stopScan();
+    con_time=discoveredBluetoothDevicesList.length+con_time;
+    await timer_function();
+    if(FlutterBluePlus.isScanning==false)
+    {
+      print("Stoped scanning");
+    }
+  }
+  catch (e) {
+    final snackBar = snackBarFail(prettyException("Start Scan Error:", e));
+    snackBarKeyB.currentState?.removeCurrentSnackBar();
+    snackBarKeyB.currentState?.showSnackBar(snackBar);
+  }
+  }
   timer_function() async
   {
-
-    for (ScanResult bluetoothDevice in discoveredBluetoothDevicesList) {
-      isConnectingOrDisconnecting[bluetoothDevice.device.remoteId] ??= ValueNotifier(true);
-      isConnectingOrDisconnecting[bluetoothDevice.device.remoteId]!.value = true;
-      await bluetoothDevice.device.connect(timeout: Duration(seconds: 1)).catchError((e) {
-        final snackBar = snackBarFail(prettyException("Connect Error:", e));
-        snackBarKeyC.currentState?.removeCurrentSnackBar();
-        snackBarKeyC.currentState?.showSnackBar(snackBar);
-      }).then((v) {
-        isConnectingOrDisconnecting[bluetoothDevice.device.remoteId] ??= ValueNotifier(false);
-        isConnectingOrDisconnecting[bluetoothDevice.device.remoteId]!.value = false;
-      });
-      bluetoothDevice.device.discoverServices(timeout: 1);
+    for(ScanResult BluetoothDevice in discoveredBluetoothDevicesList) {
+      print("found list ${BluetoothDevice.device.remoteId}");
+      await connection(BluetoothDevice);
     }
-    if(ch1.isNotEmpty){
-      Timer( Duration(seconds:2), () {
-      Navigator.pushReplacementNamed(context, AdjustSettingsHome.routeName,
-          arguments: {'ch': ch1, "disclist": discoveredBluetoothDevicesList});   }); }
-    else{
-      Navigator.pushReplacementNamed(context, DisconnectDevices.routeName,
-          arguments: {'ch': ch1, "disclist": foundPopLightsList});
-    Fluttertoast.showToast(
-        msg: " Poplights  Not Discovered!!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);}
+    if(ch1.isNotEmpty)
+      {
+        Navigator.pushReplacementNamed(context, AdjustSettingsHome.routeName,
+            arguments: {'ch': ch1, "disclist": discoveredBluetoothDevicesList});
+      }
+    else
+      {
+        Navigator.pushReplacementNamed(context, DisconnectDevices.routeName,
+            arguments: {'ch': ch1, "disclist": discoveredBluetoothDevicesList});
+      }
 
   }
 
