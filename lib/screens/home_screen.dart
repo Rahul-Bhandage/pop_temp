@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   @override
   void dispose() {
-     // dispose_disconnect();
+    // dispose_disconnect();
     super.dispose();
   }
 
@@ -70,8 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
 
     final Args=(ModalRoute.of(context)!.settings.arguments?? <int,List<dynamic>> {}) as Map;
-      discoveredBluetoothDevicesList=Args["disclist"];
-      ch1=Args["ch"];
+    // discoveredBluetoothDevicesList=Args["disclist"];
+    ch1=Args["ch"];
 
     return WillPopScope(
         onWillPop: () async {
@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (c, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.none:
-                        // print("ConnectionState.none");
+                      // print("ConnectionState.none");
 
                         return SizedBox(
                           width: MediaQuery.of(context).size.width,
@@ -199,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
 
                       case ConnectionState.waiting:
-                        // print("ConnectionState.waiting");
+                      // print("ConnectionState.waiting");
 
                         return SizedBox(
                           width: MediaQuery.of(context).size.width,
@@ -235,9 +235,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
 
                       case ConnectionState.active:
-                        // print("ConnectionState.active");
+                      // print("ConnectionState.active");
 
                         List<ScanResult> tmpr = snapshot.data!;
+                        discoveredBluetoothDevicesList.clear();
                         for (int index = 0; index < tmpr.length; index++) {
                           if (tmpr[index].device.localName == "POP_Light") {
                             discoveredBluetoothDevicesList.add(tmpr[index]);
@@ -253,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           // print("selectedStatusList length: ${selectedStatusList.length}");
                         }
 
-                            // print("dicovered in homw$discoveredBluetoothDevicesList");
+                        // print("dicovered in homw$discoveredBluetoothDevicesList");
                         return (discoveredBluetoothDevicesList.isEmpty)
                             ? SizedBox(
                           width: MediaQuery.of(context).size.width,
@@ -262,12 +263,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                              "SEARCHING FOR DEVICES...",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: getProportionateHeight(getProportionateHeight(18.0)),
-                                  fontWeight: FontWeight.w700),
-                            ),
+                                "SEARCHING FOR DEVICES...",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: getProportionateHeight(getProportionateHeight(18.0)),
+                                    fontWeight: FontWeight.w700),
+                              ),
                               SizedBox(
                                 height: getProportionateHeight(20.0),
                               ),
@@ -291,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           color: Colors.black,
                                           fontWeight: FontWeight.w500,
                                           fontSize: getProportionateHeight(16.0)
-                                      ,overflow: TextOverflow.visible),
+                                          ,overflow: TextOverflow.visible),
                                     )),
                               ),
                               SizedBox(
@@ -300,11 +301,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               Center(
                                   child: GestureDetector(
                                     onTap: () async {
-                                        Navigator.pushReplacementNamed(context, HavingTrouble.routeName, arguments: {
+                                      Navigator.pushReplacementNamed(context, HavingTrouble.routeName, arguments: {
                                         "popid": 4,
                                         "disclist": discoveredBluetoothDevicesList,
-                                          "ch":ch1
-                                        });
+                                        "ch":ch1
+                                      });
 
                                     },
                                     child: Text(
@@ -363,7 +364,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         )
                             :
-                              SizedBox(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width,
                           height: getProportionateHeight(385.0),
                           child: Column(
@@ -401,18 +402,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                     children: List.generate(
                                         discoveredBluetoothDevicesList.length, (index) {
 
-                                        is_present(discoveredBluetoothDevicesList[index]);
+                                      is_present(discoveredBluetoothDevicesList[index]);
 
 
                                       ScanResult model =
                                       discoveredBluetoothDevicesList[index];
                                       popname='';popId='';clrid="";
                                       for(int i=0;i<unsyncedpop.length;i++)
-                                      if(discoveredBluetoothDevicesList[index].device.remoteId.toString()==unsyncedpop[i].popLightId) {
-                                        popname = unsyncedpop[i].popLightName;
-                                        popId= unsyncedpop[i].popLightId.toString();
-                                        // print("I matched ${unsyncedpop[i].popLightId.toString()}");
-                                      }
+                                        if(discoveredBluetoothDevicesList[index].device.remoteId.toString()==unsyncedpop[i].popLightId) {
+                                          popname = unsyncedpop[i].popLightName;
+                                          popId= unsyncedpop[i].popLightId.toString();
+                                          // print("I matched ${unsyncedpop[i].popLightId.toString()}");
+                                        }
 
                                       return GestureDetector(
                                         onTap: () {
@@ -460,11 +461,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 bottom: getProportionateHeight(10.0)),
                                             child: Center(
                                                 child: Text(
-                                                    popname==""?
+                                                  popname==""?
                                                   model.device.localName.isEmpty
                                                       ? model.device.remoteId.toString()
                                                       : model.device.localName
-                                                  :popname,
+                                                      :popname,
                                                   style: TextStyle(
                                                       color:
                                                       (selectedStatusList[index].selection ==
@@ -533,47 +534,47 @@ class _HomeScreenState extends State<HomeScreen> {
                                         //
                                         // print(
                                         //     "popLightsModelList: ${popLightsModelList!.length}");
-                                     popname='';popId='';clrid='';
+                                        popname='';popId='';clrid='';
 
-                                          for(int i = 0 ;i<unsyncedpop.length;i++)
-                                            if(discoveredBluetoothDevicesList[index].device.remoteId.toString()==unsyncedpop[i].popLightId.toString()) {
-                                              popname =
-                                                  unsyncedpop[i].popLightName;
-                                              popId = unsyncedpop[i].popLightId
-                                                  .toString();
+                                        for(int i = 0 ;i<unsyncedpop.length;i++)
+                                          if(discoveredBluetoothDevicesList[index].device.remoteId.toString()==unsyncedpop[i].popLightId.toString()) {
+                                            popname =
+                                                unsyncedpop[i].popLightName;
+                                            popId = unsyncedpop[i].popLightId
+                                                .toString();
                                             clrid = unsyncedpop[i]
-                                                  .colorid;
+                                                .colorid;
 
-                                              // print(
-                                              //     "I matched while adding ${unsyncedpop[i]
-                                              //         .popLightId.toString()}");
-                                            }
+                                            // print(
+                                            //     "I matched while adding ${unsyncedpop[i]
+                                            //         .popLightId.toString()}");
+                                          }
 
 
-                                              await DatabaseHelper.addPopLight(PopLightModel(
-                                                  popLightId: discoveredBluetoothDevicesList[index]
-                                                      .device
-                                                      .remoteId
-                                                      .toString(),
-                                                  groupId: 0,
-                                                  popLightName:popname!=""?popname:
-                                                  discoveredBluetoothDevicesList[index]
-                                                      .device
-                                                      .localName
-                                                      .isEmpty
-                                                      ? discoveredBluetoothDevicesList[index]
-                                                      .device
-                                                      .remoteId
-                                                      .toString()
-                                                      : discoveredBluetoothDevicesList[index]
-                                                      .device
-                                                      .localName
-                                                  ,
-                                                  isOn: 0,
-                                                  brightness: 0,
-                                                  glow: 0,
-                                                  timer: 0,
-                                                  colorid: clrid!=""?clrid:'assets/VermillionRedLight.png'));
+                                        await DatabaseHelper.addPopLight(PopLightModel(
+                                            popLightId: discoveredBluetoothDevicesList[index]
+                                                .device
+                                                .remoteId
+                                                .toString(),
+                                            groupId: 0,
+                                            popLightName:popname!=""?popname:
+                                            discoveredBluetoothDevicesList[index]
+                                                .device
+                                                .localName
+                                                .isEmpty
+                                                ? discoveredBluetoothDevicesList[index]
+                                                .device
+                                                .remoteId
+                                                .toString()
+                                                : discoveredBluetoothDevicesList[index]
+                                                .device
+                                                .localName
+                                            ,
+                                            isOn: 0,
+                                            brightness: 0,
+                                            glow: 0,
+                                            timer: 0,
+                                            colorid: clrid!=""?clrid:'assets/VermillionRedLight.png'));
 
                                       }
                                     }
@@ -581,10 +582,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
 
                               ]),
-                              );
+                        );
 
                       case ConnectionState.done:
-                        // print("DONE is also called!");
+                      // print("DONE is also called!");
 
                         break;
                     }
@@ -602,30 +603,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: getProportionateHeight(20.0),
               ),
               Align(
-              alignment: Alignment(0, 0.96),
+                alignment: Alignment(0, 0.96),
 
 
-                  child: GestureDetector(
-                    onTap: () async {
-                        // for(ScanResult r in discoveredBluetoothDevicesList)
-                        //   await disconnection(r);
+                child: GestureDetector(
+                  onTap: () async {
+                    // for(ScanResult r in discoveredBluetoothDevicesList)
+                    //   await disconnection(r);
 
 
-                      Navigator.pushReplacementNamed(context, DisconnectDevices.routeName, arguments: {
-                        // "popid": 0,
-                        "disclist": discoveredBluetoothDevicesList,
-                        'ch':ch1
-                      });
-                    },
+                    Navigator.pushReplacementNamed(context, DisconnectDevices.routeName, arguments: {
+                      // "popid": 0,
+                      "disclist": discoveredBluetoothDevicesList,
+                      'ch':ch1
+                    });
+                  },
 
-                    child: Text(
-                      "HOME",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: getProportionateHeight(14.0)),
-                    ),
-                  ),),
+                  child: Text(
+                    "HOME",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                        fontSize: getProportionateHeight(14.0)),
+                  ),
+                ),),
             ])));
 
 
@@ -668,12 +669,12 @@ class _HomeScreenState extends State<HomeScreen> {
         // print("device iam connected with $bluetoothDevice");
         await stream(bluetoothDevice);
       }
-      }
+    }
 
 
 
 
-  // }
+    // }
   }
 
   disconnection(ScanResult bluetoothDevice) async {
@@ -755,24 +756,24 @@ class _HomeScreenState extends State<HomeScreen> {
         present == true;
       }}
     if(!present){
-     await  connection(r);
+      await  connection(r);
     }
   }
 
-  // dispose_disconnect() async{
-  //   for (ScanResult bluetoothDevice in discoveredBluetoothDevicesList) {
-  //     isConnectingOrDisconnecting[bluetoothDevice.device.remoteId] ??= ValueNotifier(true);
-  //     isConnectingOrDisconnecting[bluetoothDevice.device.remoteId]!.value = true;
-  //     await bluetoothDevice.device.disconnect(timeout:1).catchError((e) {
-  //       final snackBar = snackBarFail(prettyException("Connect Error:", e));
-  //       snackBarKeyC.currentState?.removeCurrentSnackBar();
-  //       snackBarKeyC.currentState?.showSnackBar(snackBar);
-  //     }).then((v) {
-  //       isConnectingOrDisconnecting[bluetoothDevice.device.remoteId] ??= ValueNotifier(false);
-  //       isConnectingOrDisconnecting[bluetoothDevice.device.remoteId]!.value = false;
-  //     });
-  //   }
-  // }
+// dispose_disconnect() async{
+//   for (ScanResult bluetoothDevice in discoveredBluetoothDevicesList) {
+//     isConnectingOrDisconnecting[bluetoothDevice.device.remoteId] ??= ValueNotifier(true);
+//     isConnectingOrDisconnecting[bluetoothDevice.device.remoteId]!.value = true;
+//     await bluetoothDevice.device.disconnect(timeout:1).catchError((e) {
+//       final snackBar = snackBarFail(prettyException("Connect Error:", e));
+//       snackBarKeyC.currentState?.removeCurrentSnackBar();
+//       snackBarKeyC.currentState?.showSnackBar(snackBar);
+//     }).then((v) {
+//       isConnectingOrDisconnecting[bluetoothDevice.device.remoteId] ??= ValueNotifier(false);
+//       isConnectingOrDisconnecting[bluetoothDevice.device.remoteId]!.value = false;
+//     });
+//   }
+// }
 
 
 }
