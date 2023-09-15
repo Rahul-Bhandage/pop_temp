@@ -198,7 +198,7 @@ class _ConnectDevices extends State<ConnectDevices> {
     for (ScanResult bluetoothDevice in discoveredBluetoothDevicesList) {
       isConnectingOrDisconnecting[bluetoothDevice.device.remoteId] ??= ValueNotifier(true);
       isConnectingOrDisconnecting[bluetoothDevice.device.remoteId]!.value = true;
-      await bluetoothDevice.device.connect(timeout: Duration(seconds: 2)).catchError((e) {
+      await bluetoothDevice.device.connect(timeout: Duration(seconds: 1)).catchError((e) {
         final snackBar = snackBarFail(prettyException("Connect Error:", e));
         snackBarKeyC.currentState?.removeCurrentSnackBar();
         snackBarKeyC.currentState?.showSnackBar(snackBar);
